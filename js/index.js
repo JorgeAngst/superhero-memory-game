@@ -35,15 +35,47 @@ window.addEventListener('load', event => {
     html += `<div class="front" style="background: url(img/${pic.img}) no-repeat"></div>`;
     html += `</div>`;
   });
-
+  
   // Add all the divs to the HTML
   document.querySelector('#memory-board').innerHTML = html;
-
+  
   // Bind the click event of each element to a function
   document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('click', () => {
-      // TODO: write some code here
-      console.log(`Card clicked: ${card}`);
+      // turn card
+      card.classList.toggle('turned');
+      
+      // Add card name to pickCards array
+      memoryGame.pickedCards.push(card.dataset.cardName)
+      
+      // Assign card's name to each card.
+      let card1 = memoryGame.pickedCards[0];
+      let card2 = memoryGame.pickedCards[1];
+      
+      // Check if cards are the same
+      if (memoryGame.pickedCards.length == 2) {
+        let result = memoryGame.checkIfPair(card1, card2)
+        if (result !== true) {
+          console.log('turn')
+        }
+      }
+      
+      if (memoryGame.pickedCards.length > 2) {
+        memoryGame.pickedCards.splice(0,2)
+      }
+
+      
+      // Score
+      const pairsClickedScore = document.getElementById('pairs-clicked');
+      pairsClickedScore.innerHTML = memoryGame.pairsClicked;
+
+      const pairsGuessedScore = document.getElementById('pairs-guessed');
+      pairsGuessedScore.innerHTML = memoryGame.pairsGuessed;
+      
+      
+      memoryGame.isFinished();  
+      
+      // console.log(`Card clicked: ${card}`);
     });
   });
 });
